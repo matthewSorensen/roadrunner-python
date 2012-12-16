@@ -1,9 +1,11 @@
 from roadrunnerlib import rrPython
+from pkg_resources import resource_filename
+
 import os
 
-modelPath = ('C:\\roadRunner\\models\\feedback.xml')
+model = resource_filename('roadrunnerlib','feedback.xml')
 
-sbml = rrPython.loadSBMLFromFile(modelPath)
+sbml = rrPython.loadSBMLFromFile(model)
 rrPython.setTimeStart(0.0)
 rrPython.setTimeEnd(3.0)
 rrPython.setNumPoints(20)

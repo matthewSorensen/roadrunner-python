@@ -1,8 +1,10 @@
 from roadrunnerlib import rrPython
+from pkg_resources import resource_string
 import numpy
 import matplotlib.pyplot as plot
 
-model = open('C:\\roadRunner\\models\\feedback.xml', 'r').read()
+model = resource_string('roadrunnerlib','feedback.xml')
+
 rrPython.loadSBML(model)
 timeStart = 0.0
 timeEnd = 10.0

@@ -1,5 +1,8 @@
 from roadrunnerlib import rrPython
-rrPython.loadSBMLFromFile('C:\\roadRunner\\models\\feedback.xml')
+from pkg_resources import resource_filename
+
+model = resource_filename('roadrunnerlib','feedback.xml')
+rrPython.loadSBMLFromFile(model)
 results = rrPython.simulateEx(0.0,2.0,20)
 
 print results
