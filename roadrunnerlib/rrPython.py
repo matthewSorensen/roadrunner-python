@@ -4,12 +4,23 @@
 
 import sys
 import os
-from ctypes import *
-os.chdir(os.path.dirname(__file__))
-rrInstallFolder = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'bin'))
-os.environ['PATH'] = rrInstallFolder + ';' + "c:\\Python27" + ';' + "c:\\Python27\\Lib\\site-packages" + ';' + os.environ['PATH']
-handle = WinDLL (rrInstallFolder + "\\rr_c_api.dll")
+import platform
+
 from numpy import *
+from ctypes import *
+from ctypes.util import find_library
+
+# Ctypes documentation says this may be better to do at
+# install time. 
+handle = find_library("rr_c_api")
+
+if handle is None:
+    raise EnvironmentError("Unable to find RoadRunner")
+
+if "Windows" == platform.system() :
+    handle = WinDLL(handle)
+else:
+    handle = CDLL(handle)
 
 ##\mainpage notitle
 #\section Introduction
