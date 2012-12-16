@@ -1,4 +1,4 @@
-import rrPython
+from roadrunnerlib import rrPython
 import numpy
 import matplotlib.pyplot as plot
 

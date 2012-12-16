@@ -28,7 +28,7 @@ else:
 #
 #@code
 #
-#import rrPython
+#from roadrunnerlib import rrPython
 #
 #rrPython.loadSBMLFromFile('C:\\Models\\mymodel.xml')
 #

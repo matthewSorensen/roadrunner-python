@@ -1,4 +1,4 @@
-import rrPython
+from roadrunnerlib import rrPython
 import os
 
 modelPath = ('C:\\roadRunner\\models\\feedback.xml')

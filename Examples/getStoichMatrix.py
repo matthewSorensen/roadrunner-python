@@ -1,4 +1,4 @@
-import rrPython
+from roadrunnerlib import rrPython
 
 modelPath = ('C:\\RoadRunner\\Models\\feedback.xml')
 rrPython.loadSBMLFromFile(modelPath)

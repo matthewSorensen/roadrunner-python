@@ -1,4 +1,4 @@
-import rrPython
+from roadrunnerlib import rrPython
 
 rrPython.loadSBMLFromFile('C:\\roadRunner\\models\\simple.xml')
 rrPython.setSteadyStateSelectionList('time S1 S2')
