@@ -1,5 +1,5 @@
 from roadrunnerlib import rrPython
-
+from pkg_resources import resource_filename
 
 print 'RoadRunner Python'
 print rrPython.getCopyright()
@@ -10,7 +10,9 @@ endTime = 5
 numPoints = 50
 selList="time,S1,S2"
 
-result = rrPython.loadSBMLFromFile("/usr/local/install/models/test_1.xml")
+
+model = resource_filename('roadrunnerlib','test_1.xml')
+result = rrPython.loadSBMLFromFile(model)
 
 rrPython.setTimeStart(startTime)
 rrPython.setTimeEnd(endTime)
