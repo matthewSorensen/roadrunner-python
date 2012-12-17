@@ -374,6 +374,7 @@ def simulate():
     #TODO: Check result
     rowCount = handle.getResultNumRows(result)
     colCount = handle.getResultNumCols(result)
+
     resultArray = zeros((rowCount,colCount))
     for m in range(rowCount):
         for n in range(colCount):

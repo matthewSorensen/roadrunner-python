@@ -6,6 +6,7 @@ setup(
     packages=['roadrunnerlib'],
     license='Apache License 2.0',
     long_description=open('README.rst').read(),
+    package_data={'roadrunnerlib' : ['data/*']},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',

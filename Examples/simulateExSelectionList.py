@@ -1,7 +1,7 @@
 from roadrunnerlib import rrPython
 from pkg_resources import resource_filename
 
-model = resource_filename('roadrunnerlib','simple.xml')
+model = resource_filename('roadrunnerlib','data/simple.xml')
 
 rrPython.loadSBMLFromFile(model)
 rrPython.setSteadyStateSelectionList('time S1 S2')

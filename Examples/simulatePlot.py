@@ -3,7 +3,7 @@ from pkg_resources import resource_string
 import numpy
 import matplotlib.pyplot as plot
 
-model = resource_string('roadrunnerlib','feedback.xml')
+model = resource_string('roadrunnerlib','data/feedback.xml')
 
 rrPython.loadSBML(model)
 timeStart = 0.0

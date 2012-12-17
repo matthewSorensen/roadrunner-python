@@ -7,8 +7,12 @@ class TestBasicFunctionality(unittest.TestCase):
     def setUp(self):
         None
 
+    def test_awesomeness(self):
+        True
+
     def test_load_and_simulate(self):
-        rrPython.loadSBMLFromFile(resource_filename('roadrunnerlib','feedback.xml'))
+        model = resource_filename('roadrunnerlib','data/feedback.xml')
+        rrPython.loadSBMLFromFile(model)
         rrPython.simulate()
 
 if __name__ == '__main__':

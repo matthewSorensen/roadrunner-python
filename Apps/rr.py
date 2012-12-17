@@ -11,7 +11,7 @@ numPoints = 50
 selList="time,S1,S2"
 
 
-model = resource_filename('roadrunnerlib','test_1.xml')
+model = resource_filename('roadrunnerlib','data/test_1.xml')
 result = rrPython.loadSBMLFromFile(model)
 
 rrPython.setTimeStart(startTime)

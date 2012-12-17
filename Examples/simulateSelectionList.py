@@ -3,7 +3,7 @@ from pkg_resources import resource_filename
 
 import os
 
-model = resource_filename('roadrunnerlib','feedback.xml')
+model = resource_filename('roadrunnerlib','data/feedback.xml')
 
 sbml = rrPython.loadSBMLFromFile(model)
 rrPython.setTimeStart(0.0)
