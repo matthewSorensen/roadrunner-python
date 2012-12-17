@@ -8,8 +8,8 @@ class TestNoFailure(unittest.TestCase):
     checks that that it doesn't fail. Replaces the MasterTest.py testbase"""
 
     def setUp(self):
-        None
-
+         rrPython.loadSBMLFromFile(resource_filename('roadrunnerlib','data/feedback.xml'))
+       
     def test_information(self):
         """ Tests that all of the methods returning static
         information on this build exist and don't fail """
@@ -24,6 +24,27 @@ class TestNoFailure(unittest.TestCase):
         model = rrPython.getSBML()
         self.assertIsNotNone(model)
         rrPython.loadSBML(model)
+
+    def test_setters(self):
+        self.assertTrue(rrPython.setComputeAndAssignConservationLaws('1'),'setComputeAndAssignConservationLaws')
+        self.assertTrue(rrPython.setFloatingSpeciesByIndex(0, 1.0),'setFloatingSpeciesByIndex')
+        self.assertTrue(rrPython.setGlobalSpeciesByIndex(0, 1.0),'setGlobalSpeciesByIndex')
+        self.assertTrue(rrPython.setBoundarySpeciesByIndex(0,1.0),'setBoundarySpeciesByIndex')
+        self.assertTrue(rrPython.setTempFolder('.'),'setTempFolder')
+        self.assertTrue(rrPython.setCapabilities('aaa'),'setCapabilities')
+        self.assertTrue(rrPython.setTimeEnd(5.0),'setTimeEnd')
+        self.assertTrue(rrPython.setTimeStart(0.0),'setTimeStart')
+        self.assertTrue(rrPython.setNumPoints(10),'setNumPoints')
+        self.assertTrue(rrPython.setValuer('S1',1.0),'setValue')
+        self.assertTrue(rrPython.setCompartmentByIndex(0,1.0),'setCompartmentByIndex')
+        self.assertTrue(rrPython.setSelectionList('time,S1'),'setSelectionList')
+        self.assertTrue(rrPython.setSteadyStateSelectionList('S1'),'setSteadyStateSelectionList')
+
+
+
+"""
+        execfile(location + 'setCompartmentByIndex.py')
+"""
         
 # The remaining functiobs from MasterTest.py to import:
     
@@ -105,19 +126,6 @@ execfile(location + 'printMatrix.py')
 #execfile(location + 'printResult.py')
 #execfile(location + 'printVector.py')
 execfile(location + 'reset.py')
-execfile(location + 'setBoundarySpeciesByIndex.py')
-execfile(location + 'setCapabilities.py')
-execfile(location + 'setCompartmentByIndex.py')
-execfile(location + 'setComputeAndAssignConservationLaws.py')
-execfile(location + 'setFloatingSpeciesByIndex.py')
-execfile(location + 'setGlobalParameterByIndex.py')
-execfile(location + 'setNumPoints.py')
-execfile(location + 'setSelectionList.py')
-execfile(location + 'setSteadyStateSelectionList.py')
-execfile(location + 'setTempFolder.py')
-execfile(location + 'setTimeEnd.py')
-execfile(location + 'setTimeStart.py')
-execfile(location + 'setValue.py')
 #execfile(location + 'setVectorElement.py')
 #execfile(location + 'simulate.py')
 #execfile(location + 'simulateEx.py')
