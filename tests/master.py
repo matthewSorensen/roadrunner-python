@@ -20,12 +20,10 @@ class TestNoFailure(unittest.TestCase):
 
     def test_load_save_models(self):
         """ Tests that loading and saving SMBL doesn't fail """
-        rrPython.loadSMBLFromFile(resource_filename('roadrunnerlib','data/feedback.xml'))
+        rrPython.loadSBMLFromFile(resource_filename('roadrunnerlib','data/feedback.xml'))
         model = rrPython.getSBML()
         self.assertIsNotNone(model)
         rrPython.loadSBML(model)
-        tmp = tempfile.NamedTemporaryFile()
-        rrPython.writeSBML(tmp.name)
         
 # The remaining functiobs from MasterTest.py to import:
     
