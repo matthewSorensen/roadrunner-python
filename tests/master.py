@@ -24,30 +24,29 @@ class TestNoFailure(unittest.TestCase):
         model = rrPython.getSBML()
         self.assertIsNotNone(model)
         rrPython.loadSBML(model)
-
-    def test_setters(self):
-        self.assertTrue(rrPython.setComputeAndAssignConservationLaws('1'),'setComputeAndAssignConservationLaws')
-        self.assertTrue(rrPython.setFloatingSpeciesByIndex(0, 1.0),'setFloatingSpeciesByIndex')
-        self.assertTrue(rrPython.setGlobalSpeciesByIndex(0, 1.0),'setGlobalSpeciesByIndex')
-        self.assertTrue(rrPython.setBoundarySpeciesByIndex(0,1.0),'setBoundarySpeciesByIndex')
-        self.assertTrue(rrPython.setTempFolder('.'),'setTempFolder')
-        self.assertTrue(rrPython.setCapabilities('aaa'),'setCapabilities')
-        self.assertTrue(rrPython.setTimeEnd(5.0),'setTimeEnd')
-        self.assertTrue(rrPython.setTimeStart(0.0),'setTimeStart')
-        self.assertTrue(rrPython.setNumPoints(10),'setNumPoints')
-        self.assertTrue(rrPython.setValuer('S1',1.0),'setValue')
-        self.assertTrue(rrPython.setCompartmentByIndex(0,1.0),'setCompartmentByIndex')
-        self.assertTrue(rrPython.setSelectionList('time,S1'),'setSelectionList')
-        self.assertTrue(rrPython.setSteadyStateSelectionList('S1'),'setSteadyStateSelectionList')
-
-
-
-"""
-        execfile(location + 'setCompartmentByIndex.py')
-"""
-        
-# The remaining functiobs from MasterTest.py to import:
     
+def test(*args):
+    name = args[0]
+    args = args[1:]
+    setattr(TestNoFailure,'test_' + name, lambda self:  self.assertTrue(getattr(rrPython,name)(*args)))
+
+
+test('setFloatingSpeciesByIndex',0,1.0)
+test('setSteadyStateSelectionList','S1')
+test('setSelectionList','time,S1')
+test('setCompartmentByIndex',0,1.0)
+test('setValue','S1',1.0)
+test('setNumPoints',10)
+test('setTimeStart',0.0)
+test('setTimeEnd',5.0)
+test('setCapabilities','aaa')
+test('setTempFolder','.')
+test('setBoundarySpeciesByIndex',0,1.0)
+test('setGlobalSpeciesByIndex',0,1.0)
+test('setFloatingSpeciesByIndex',0,1.0)
+test('setComputeAndAssignConservationLaws','1')
+
+
 """
 #execfile(location + 'computeSteadyStateValues.py')
 execfile(location + 'evalModel.py')
