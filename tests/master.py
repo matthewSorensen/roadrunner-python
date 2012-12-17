@@ -1,5 +1,6 @@
 from roadrunnerlib import rrPython
 from pkg_resources import resource_filename
+import tempfile
 import unittest
 
 class TestNoFailure(unittest.TestCase):
@@ -16,11 +17,19 @@ class TestNoFailure(unittest.TestCase):
         self.assertIsNotNone(rrPython.getVersion())
         self.assertIsNotNone(rrPython.getBuildDate())
         self.assertIsNotNone(rrPython.getCopyright())
+
+    def test_load_save_models(self):
+        """ Tests that loading and saving SMBL doesn't fail """
+        rrPython.loadSMBLFromFile(resource_filename('roadrunnerlib','data/feedback.xml'))
+        model = rrPython.getSBML()
+        self.assertIsNotNone(model)
+        rrPython.loadSBML(model)
+        tmp = tempfile.NamedTemporaryFile()
+        rrPython.writeSBML(tmp.name)
         
 # The remaining functiobs from MasterTest.py to import:
     
 """
-execfile(location + 'writeSBML.py')
 #execfile(location + 'computeSteadyStateValues.py')
 execfile(location + 'evalModel.py')
 #execfile(location + 'getAvailableSymbols.py')
@@ -80,7 +89,6 @@ execfile(location + 'getResultColumnLabel.py')
 execfile(location + 'getResultElement.py')
 execfile(location + 'getResultNumCols.py')
 execfile(location + 'getResultNumRows.py')
-execfile(location + 'getSBML.py')
 #execfile(location + 'getScaledElasticityMatrix.py')
 #execfile(location + 'getScaledFloatingSpeciesElasticity.py')
 execfile(location + 'getSelectionList.py')
@@ -93,8 +101,6 @@ execfile(location + 'getValue.py')
 #execfile(location + 'getVectorElement.py')
 #execfile(location + 'getVectorLength.py')
 #execfile(location + 'hasError.py')
-execfile(location + 'loadSBML.py')
-execfile(location + 'loadSBMLFromFile.py')
 #execfile(location + 'oneStep.py')
 execfile(location + 'printList.py')
 execfile(location + 'printMatrix.py')
@@ -120,7 +126,6 @@ execfile(location + 'setValue.py')
 #execfile(location + 'steadyState.py')
 
 """
-
 
 
 if __name__ == '__main__':
