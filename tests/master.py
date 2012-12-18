@@ -25,11 +25,11 @@ class TestNoFailure(unittest.TestCase):
         self.assertIsNotNone(model)
         rrPython.loadSBML(model)
     
-def test(*args):
-    name = args[0]
-    args = args[1:]
-    setattr(TestNoFailure,'test_' + name, lambda self:  self.assertTrue(getattr(rrPython,name)(*args)))
 
+def test(name,*args):
+    """ Add a new test case to TestNoFailure,
+    checking that calling a function of rrPython doesn't fail """
+    setattr(TestNoFailure,'test_' + name, lambda self:  getattr(rrPython,name)(*args))
 
 test('setFloatingSpeciesByIndex',0,1.0)
 test('setSteadyStateSelectionList','S1')
@@ -45,15 +45,29 @@ test('setBoundarySpeciesByIndex',0,1.0)
 test('setGlobalSpeciesByIndex',0,1.0)
 test('setFloatingSpeciesByIndex',0,1.0)
 test('setComputeAndAssignConservationLaws','1')
+test('evalModel')
+test('getBoundarySpeciesByIndex',0)
+test('getBoundarySpeciesByIds')
+test('reset')
+test('getLastError')
+test('getGlobalParameterByIndex',0)
+test('getGlobalParameterIds')
+test('getGlobalParameterValues')
+test('getNumberOfBoundarySpecies')
+test('getNumberOfDependentSpecies')
+test('getNumberOfCompartments')
+test('getNumberOfFloatingSpecies')
+test('getNumberOfGlobalParameters')
+test('getNumberOfIndependentSpecies')
+test('getNumberOfReactions')
+
+
+
 
 
 """
 #execfile(location + 'computeSteadyStateValues.py')
-execfile(location + 'evalModel.py')
 #execfile(location + 'getAvailableSymbols.py')
-execfile(location + 'getBoundarySpeciesByIndex.py')
-execfile(location + 'getBoundarySpeciesIds.py')
-#execfile(location + 'getCCode.py')
 #execfile(location + 'getCCodeHeader.py')
 #execfile(location + 'getCCodeSource.py')
 execfile(location + 'getCapabilities.py')
@@ -61,7 +75,6 @@ execfile(location + 'getCompartmentByIndex.py')
 execfile(location + 'getCompartmentIds.py')
 execfile(location + 'getConcentrationControlCoefficientIds.py')
 execfile(location + 'getConservationMatrix.py')
-execfile(location + 'getCopyright.py')
 #execfile(location + 'getuCC.py')
 #execfile(location + 'getuEE.py')
 #execfile(location + 'getCC.py')
@@ -75,23 +88,12 @@ execfile(location + 'getFloatingSpeciesIds.py')
 execfile(location + 'getFloatingSpeciesConcentrations.py')
 execfile(location + 'getFluxControlCoefficientIds.py')
 #execfile(location + 'getFullJacobian.py')                 Causes crash
-execfile(location + 'getGlobalParameterByIndex.py')
-execfile(location + 'getGlobalParameterIds.py')
-execfile(location + 'getGlobalParameterValues.py')
-execfile(location + 'getLastError.py')
 execfile(location + 'getLinkMatrix.py')
 execfile(location + 'getNrMatrix.py')
 execfile(location + 'getL0Matrix.py')
 execfile(location + 'getMatrixNumCols.py')
 execfile(location + 'getMatrixNumRows.py')
 execfile(location + 'getMatrixElement.py')
-execfile(location + 'getNumberOfBoundarySpecies.py')
-execfile(location + 'getNumberOfCompartments.py')
-execfile(location + 'getNumberOfDependentSpecies.py')
-execfile(location + 'getNumberOfFloatingSpecies.py')
-execfile(location + 'getNumberOfGlobalParameters.py')
-execfile(location + 'getNumberOfIndependentSpecies.py')
-execfile(location + 'getNumberOfReactions.py')
 execfile(location + 'getParamPromotedSBML.py')
 execfile(location + 'getRRInstance.py')
 execfile(location + 'getRateOfChange.py')
@@ -124,14 +126,12 @@ execfile(location + 'printList.py')
 execfile(location + 'printMatrix.py')
 #execfile(location + 'printResult.py')
 #execfile(location + 'printVector.py')
-execfile(location + 'reset.py')
 #execfile(location + 'setVectorElement.py')
 #execfile(location + 'simulate.py')
 #execfile(location + 'simulateEx.py')
 #execfile(location + 'steadyState.py')
 
 """
-
 
 if __name__ == '__main__':
     unittest.main()
