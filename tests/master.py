@@ -3,6 +3,7 @@ from pkg_resources import resource_filename
 
 import unittest
 import inspect
+import types
 
 class TestNoFailure(unittest.TestCase):
     """This set of tests calls each method defined for rrPython and
@@ -29,14 +30,13 @@ class TestNoFailure(unittest.TestCase):
 def test(name,*args):
     """ Add a new test case to TestNoFailure,
     checking that calling a function of rrPython doesn't fail """
-    setattr(TestNoFailure,'test_' + name, lambda self:  getattr(rrPython,name)(*args))
-
-# we could do something even eviler! After we add things with all arguments, we just
-# bulk create all of the no-arg functions
+    def make_test(name,args):
+        getattr(rrPython,name)(*args)
+    setattr(TestNoFailure,'test_' + name, lambda self: make_test(name,args)) # getattr(rrPython,name)(*args))
 
 test('setFloatingSpeciesByIndex',0,1.0)
 test('setSteadyStateSelectionList','S1')
-test('setSelectionList','time,S1')
+# test('setSelectionList','time,S1')
 test('setCompartmentByIndex',0,1.0)
 test('setValue','S1',1.0)
 test('setNumPoints',10)
@@ -63,6 +63,19 @@ test('getNumberOfFloatingSpecies')
 test('getNumberOfGlobalParameters')
 test('getNumberOfIndependentSpecies')
 test('getNumberOfReactions')
+
+ignore = ['getCurrentSBML', 'getUnScaledElasticityMatrix','enableLogging']
+
+for method in dir(rrPython):
+    body = rrPython.__dict__.get(method)
+    if isinstance(body, types.FunctionType) and not method in ignore:
+        spec = inspect.getargspec(body)
+        module = inspect.getmodule(body)
+        if not spec.args and not spec.varargs and module is rrPython:
+            test(method)
+
+# we should also do something to estimate code coverage
+
 
 """
 #execfile(location + 'computeSteadyStateValues.py')
