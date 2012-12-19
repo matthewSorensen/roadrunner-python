@@ -103,7 +103,8 @@ if __name__ == '__main__':
     try: unittest.main()
     finally:
         unseen = set(functions.keys()) - covers([]) - ignore
-        print 'Covered ',  round(100 * len(unseen)/len(functions)), '% of module functions'
+        f = len(functions)
+        print 'Covered ',  round(100 * (f - len(unseen)) / f), '% of module functions'
         if '--untested' in sys.argv:
             for function in unseen:
                 print function, ' is untested'
