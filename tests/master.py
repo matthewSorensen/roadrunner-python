@@ -1,7 +1,8 @@
 from roadrunnerlib import rrPython
 from pkg_resources import resource_filename
-import tempfile
+
 import unittest
+import inspect
 
 class TestNoFailure(unittest.TestCase):
     """This set of tests calls each method defined for rrPython and
@@ -25,11 +26,13 @@ class TestNoFailure(unittest.TestCase):
         self.assertIsNotNone(model)
         rrPython.loadSBML(model)
     
-
 def test(name,*args):
     """ Add a new test case to TestNoFailure,
     checking that calling a function of rrPython doesn't fail """
     setattr(TestNoFailure,'test_' + name, lambda self:  getattr(rrPython,name)(*args))
+
+# we could do something even eviler! After we add things with all arguments, we just
+# bulk create all of the no-arg functions
 
 test('setFloatingSpeciesByIndex',0,1.0)
 test('setSteadyStateSelectionList','S1')
@@ -60,10 +63,6 @@ test('getNumberOfFloatingSpecies')
 test('getNumberOfGlobalParameters')
 test('getNumberOfIndependentSpecies')
 test('getNumberOfReactions')
-
-
-
-
 
 """
 #execfile(location + 'computeSteadyStateValues.py')
