@@ -4,6 +4,12 @@ from pkg_resources import resource_filename
 import unittest
 import inspect
 import types
+import sys
+
+def covers(functions, d = set([])):
+    d |= set(functions)
+    return d
+
 
 class TestNoFailure(unittest.TestCase):
     """This set of tests calls each method defined for rrPython and
@@ -16,27 +22,62 @@ class TestNoFailure(unittest.TestCase):
         """ Tests that all of the methods returning static
         information on this build exist and don't fail """
 
+        covers(['getVersion','getBuildDate','getCopyright'])
+
         self.assertIsNotNone(rrPython.getVersion())
         self.assertIsNotNone(rrPython.getBuildDate())
         self.assertIsNotNone(rrPython.getCopyright())
 
     def test_load_save_models(self):
         """ Tests that loading and saving SMBL doesn't fail """
+        covers(['loadSBMLFromFile','getSBML','loadSBML'])
+
         rrPython.loadSBMLFromFile(resource_filename('roadrunnerlib','data/feedback.xml'))
         model = rrPython.getSBML()
         self.assertIsNotNone(model)
         rrPython.loadSBML(model)
-    
+   
+# Adding somewhat meaningful tests for everything else is future work.
+# In the meantime, all other functions are simply executed - not throwing
+# an exception or segfaulting is taken as success.
+
+# In order to eliminate much boilerplate, this is automated.
+ 
 def test(name,*args):
     """ Add a new test case to TestNoFailure,
     checking that calling a function of rrPython doesn't fail """
     def make_test(name,args):
+        covers([name])
         getattr(rrPython,name)(*args)
-    setattr(TestNoFailure,'test_' + name, lambda self: make_test(name,args)) # getattr(rrPython,name)(*args))
+    setattr(TestNoFailure,'test_' + name, lambda self: make_test(name,args))
+
+def defined_in_module(module):
+    """ Returns a dict mapping function name to body for all
+    functions defined in the supplied module """
+    ret = {}
+    for function in dir(module):
+        body = module.__dict__.get(function)
+        parent = inspect.getmodule(body)
+        if isinstance(body, types.FunctionType) and parent is module:
+            ret[function] = body
+    return ret
+
+def derive_nullary_tests(functions,to_ignore):
+    """ Generates a test for all functions of zero arguments """
+    for name, body in functions.iteritems():
+        spec = inspect.getargspec(body)
+        if not spec.args and not spec.varargs and name not in to_ignore:
+            test(name)
+
+functions = defined_in_module(rrPython)
+
+ignore = set(['getCurrentSBML', 'getUnScaledElasticityMatrix','enableLogging'])
+
+derive_nullary_tests(functions,ignore)
+
 
 test('setFloatingSpeciesByIndex',0,1.0)
 test('setSteadyStateSelectionList','S1')
-# test('setSelectionList','time,S1')
 test('setCompartmentByIndex',0,1.0)
 test('setValue','S1',1.0)
 test('setNumPoints',10)
@@ -48,102 +89,21 @@ test('setBoundarySpeciesByIndex',0,1.0)
 test('setGlobalSpeciesByIndex',0,1.0)
 test('setFloatingSpeciesByIndex',0,1.0)
 test('setComputeAndAssignConservationLaws','1')
-test('evalModel')
 test('getBoundarySpeciesByIndex',0)
-test('getBoundarySpeciesByIds')
-test('reset')
-test('getLastError')
 test('getGlobalParameterByIndex',0)
-test('getGlobalParameterIds')
-test('getGlobalParameterValues')
-test('getNumberOfBoundarySpecies')
-test('getNumberOfDependentSpecies')
-test('getNumberOfCompartments')
-test('getNumberOfFloatingSpecies')
-test('getNumberOfGlobalParameters')
-test('getNumberOfIndependentSpecies')
-test('getNumberOfReactions')
 
-ignore = ['getCurrentSBML', 'getUnScaledElasticityMatrix','enableLogging']
-
-for method in dir(rrPython):
-    body = rrPython.__dict__.get(method)
-    if isinstance(body, types.FunctionType) and not method in ignore:
-        spec = inspect.getargspec(body)
-        module = inspect.getmodule(body)
-        if not spec.args and not spec.varargs and module is rrPython:
-            test(method)
-
-# we should also do something to estimate code coverage
-
-
-"""
-#execfile(location + 'computeSteadyStateValues.py')
-#execfile(location + 'getAvailableSymbols.py')
-#execfile(location + 'getCCodeHeader.py')
-#execfile(location + 'getCCodeSource.py')
-execfile(location + 'getCapabilities.py')
-execfile(location + 'getCompartmentByIndex.py')
-execfile(location + 'getCompartmentIds.py')
-execfile(location + 'getConcentrationControlCoefficientIds.py')
-execfile(location + 'getConservationMatrix.py')
-#execfile(location + 'getuCC.py')
-#execfile(location + 'getuEE.py')
-#execfile(location + 'getCC.py')
-#execfile(location + 'getEE.py')
-execfile(location + 'getEigenValueIds.py')
-execfile(location + 'getElasticityCoefficientIds.py')
-execfile(location + 'getFloatingSpeciesByIndex.py')
-execfile(location + 'getFloatingSpeciesInitialConcentrations.py')
-execfile(location + 'getFloatingSpeciesInitialConditionIds.py')
-execfile(location + 'getFloatingSpeciesIds.py')
-execfile(location + 'getFloatingSpeciesConcentrations.py')
-execfile(location + 'getFluxControlCoefficientIds.py')
-#execfile(location + 'getFullJacobian.py')                 Causes crash
-execfile(location + 'getLinkMatrix.py')
-execfile(location + 'getNrMatrix.py')
-execfile(location + 'getL0Matrix.py')
-execfile(location + 'getMatrixNumCols.py')
-execfile(location + 'getMatrixNumRows.py')
-execfile(location + 'getMatrixElement.py')
-execfile(location + 'getParamPromotedSBML.py')
-execfile(location + 'getRRInstance.py')
-execfile(location + 'getRateOfChange.py')
-execfile(location + 'getRatesOfChange.py')
-execfile(location + 'getRatesOfChangeEx.py')
-execfile(location + 'getRatesOfChangeIds.py')
-execfile(location + 'getReactionIds.py')
-execfile(location + 'getReactionRate.py')
-execfile(location + 'getReactionRates.py')
-execfile(location + 'getReactionRatesEx.py')
-#execfile(location + 'getReducedJacobian.py')
-execfile(location + 'getResultColumnLabel.py')
-execfile(location + 'getResultElement.py')
-execfile(location + 'getResultNumCols.py')
-execfile(location + 'getResultNumRows.py')
-#execfile(location + 'getScaledElasticityMatrix.py')
-#execfile(location + 'getScaledFloatingSpeciesElasticity.py')
-execfile(location + 'getSelectionList.py')
-execfile(location + 'getSteadyStateSelectionList.py')
-execfile(location + 'getStoichiometryMatrix.py')
-#execfile(location + 'getStringListElement.py')
-#execfile(location + 'getStringListLength.py')
-execfile(location + 'getTempFolder.py')
-execfile(location + 'getValue.py')
-#execfile(location + 'getVectorElement.py')
-#execfile(location + 'getVectorLength.py')
-#execfile(location + 'hasError.py')
-#execfile(location + 'oneStep.py')
-execfile(location + 'printList.py')
-execfile(location + 'printMatrix.py')
-#execfile(location + 'printResult.py')
-#execfile(location + 'printVector.py')
-#execfile(location + 'setVectorElement.py')
-#execfile(location + 'simulate.py')
-#execfile(location + 'simulateEx.py')
-#execfile(location + 'steadyState.py')
-
-"""
 
 if __name__ == '__main__':
-    unittest.main()
+    # Most of the time we don't want the list of functions that weren't covered or
+    # ignored. If that is desired, add the --untested flag.
+    display_untested = '--untested' in sys.argv
+
+    if display_untested: sys.argv.remove('--untested')
+
+    try: unittest.main()
+    finally:
+        unseen = set(functions.keys()) - covers([]) - ignore
+        print 'Covered ',  round(100 * len(unseen)/len(functions)), '% of module functions'
+        if '--untested' in sys.argv:
+            for function in unseen:
+                print function, ' is untested'
